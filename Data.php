@@ -9,6 +9,7 @@ namespace system\packages\data;
 
 use \system\classes\Core;
 use \system\classes\Configuration;
+use \system\classes\Utils;
 use \system\classes\Database;
 
 
@@ -102,6 +103,11 @@ class Data{
   }//list
 
   public static function has($database_name, $key){
+    // make sure the key is not reserved
+    if (self::_is_key_reserved($key)) {
+      return false;
+    }
+    // make sure the user has access to this db
     $res = self::_authenticate($database_name);
     if (!$res['success']){
       return false;
@@ -112,6 +118,11 @@ class Data{
   }//has
 
   public static function get($database_name, $key){
+    // make sure the key is not reserved
+    if (self::_is_key_reserved($key)) {
+      return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
+    }
+    // make sure the user has access to this db
     $res = self::_authenticate($database_name);
     if (!$res['success']){
       return $res;
@@ -122,6 +133,11 @@ class Data{
   }//get
 
   public static function set($database_name, $key, $data){
+    // make sure the key is not reserved
+    if (self::_is_key_reserved($key)) {
+      return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
+    }
+    // make sure the user has access to this db
     $res = self::_authenticate($database_name);
     if (!$res['success']){
       return $res;
@@ -183,6 +199,13 @@ class Data{
   // =======================================================================================================
   // Private functions
 
+  private static function _is_key_reserved($key) {
+    $k = Utils::string_to_valid_filename($key);
+    if (in_array($k, [self::$metadata_key])) {
+      return true;
+    }
+    return false;
+  }//_is_key_reserved
 
   private static function _authenticate($database_name, $force_ownership=false){
     // guests do not have access to DBs
