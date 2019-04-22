@@ -186,6 +186,10 @@ class Data{
         }
       }
     }
+    // parse data if it is JSON
+    if (is_string($data) && is_JSON($data)) {
+      $data = json_decode($data, true);
+    }
     // write data to DB
     $db = new Database(self::$package_id, $database_name);
     return $db->write($key, $data);
