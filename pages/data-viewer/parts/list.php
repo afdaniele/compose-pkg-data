@@ -132,7 +132,7 @@ $table = array(
         'type' => '_toggle_modal',
         'class' => 'yes-no-modal',
         'API_resource' => 'data',
-        'API_action' => 'delete',
+        'API_action' => 'drop',
         'arguments' => [
           'database'
         ],
