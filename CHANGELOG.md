@@ -1,3 +1,6 @@
+## 0.2.1 (April 21, 2019)
+  - updated bump-version
+
 ## 0.2 (April 21, 2019)
   - added Data Viewer (data-viewer) page
   - added Data::del, moved authentication to API endpoints
