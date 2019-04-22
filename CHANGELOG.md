@@ -1,3 +1,6 @@
+## 0.2.2 (April 21, 2019)
+  - minor
+
 ## 0.2.1 (April 21, 2019)
   - updated bump-version
 
