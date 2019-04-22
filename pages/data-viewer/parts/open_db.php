@@ -29,6 +29,9 @@ $db = Data::getDB($db_name);
   min-height: 40px;
   overflow-x: auto;
   overflow-y: auto;
+  margin: -8px;
+  border-top: 0;
+  border-bottom: 0;
 }
 
 .entry_data_viewer_closed {
