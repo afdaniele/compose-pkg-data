@@ -213,7 +213,11 @@ class Data{
       return ['success' => false, 'data' => 'You need to login to access the databases.'];
     }
     // a database that does not exist is always accessible
-    if (!self::exists($database_name)){
+    if (!self::exists($database_name)) {
+      return ['success' => true, 'data' => null];
+    }
+    // an administrator has access to everything
+    if (Core::getUserRole() == 'administrator') {
       return ['success' => true, 'data' => null];
     }
     // get user id
