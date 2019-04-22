@@ -1,3 +1,12 @@
+## 0.3 (April 21, 2019)
+  - added "go back to list" in DB page
+  - fixed bug
+  - fixed bug
+  - minor
+  - added new DB button in DB list page
+  - added new, drop API endpoints
+  - added Data::new, Data::drop
+
 ## 0.2.2 (April 21, 2019)
   - minor
 
