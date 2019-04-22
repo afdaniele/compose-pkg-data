@@ -151,6 +151,37 @@
         "values" : {}
       }
     },
+    "delete" : {
+      "details" : "Deletes the entry corresponding to a given key and database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database the given key belongs to"
+          },
+          "key" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Key of the entry to delete"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
     "chown" : {
       "details" : "Updates the owner of the given database",
       "access_level" : [

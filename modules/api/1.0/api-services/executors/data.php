@@ -16,6 +16,12 @@ function execute( &$service, &$actionName, &$arguments ){
     case 'list':
       // get arguments
       $database_name = $arguments['database'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
       $res = Data::list($database_name);
       if (!$res['success'])
         return response400BadRequest($res['data']);
@@ -27,6 +33,12 @@ function execute( &$service, &$actionName, &$arguments ){
       // get arguments
       $database_name = $arguments['database'];
       $key = $arguments['key'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
       // check existence
       $exists = Data::has($database_name, $key);
       return response200OK(['exists' => $exists]);
@@ -36,6 +48,12 @@ function execute( &$service, &$actionName, &$arguments ){
       // get arguments
       $database_name = $arguments['database'];
       $key = $arguments['key'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
       // fetch data
       $res = Data::get($database_name, $key);
       if (!$res['success'])
@@ -49,8 +67,32 @@ function execute( &$service, &$actionName, &$arguments ){
       $database_name = $arguments['database'];
       $key = $arguments['key'];
       $value = $arguments['value'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
       // store data
       $res = Data::set($database_name, $key, $value);
+      if (!$res['success'])
+        return response400BadRequest($res['data']);
+      // success
+      return response200OK();
+      break;
+      //
+    case 'delete':
+      // get arguments
+      $database_name = $arguments['database'];
+      $key = $arguments['key'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
+      // remove entry
+      $res = Data::del($database_name, $key);
       if (!$res['success'])
         return response400BadRequest($res['data']);
       // success
@@ -61,6 +103,16 @@ function execute( &$service, &$actionName, &$arguments ){
       // get arguments
       $database_name = $arguments['database'];
       $owner = $arguments['owner'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // only administrators can change ownership
+      if (Core::getUserRole() != 'administrator') {
+        return response401UnauthorizedMsg('Only administrators can change ownership of databases.');
+      }
+      // ---
       // store data
       $res = Data::set_ownership($database_name, $owner);
       if (!$res['success'])
@@ -73,9 +125,16 @@ function execute( &$service, &$actionName, &$arguments ){
       // get arguments
       $database_name = $arguments['database'];
       $access = $arguments['access'];
+      // make sure the user has access to the DB
+      $enforce_ownership_check = boolval($access == 'private');
+      $res = Data::canAccess($database_name, $enforce_ownership_check);
+      if (!$res['success']) {
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
       // store data
       $res = ['success' => false, 'data' => 'Unknown error'];
-      switch( $access ){
+      switch ($access) {
         case 'public':
           $res = Data::set_public_access($database_name);
           break;
@@ -83,7 +142,7 @@ function execute( &$service, &$actionName, &$arguments ){
         case 'private':
           $grant = [];
           // parse `grant` parameter
-          if (array_key_exists('grant', $arguments)){
+          if (array_key_exists('grant', $arguments)) {
             $grant = array_map(
               function ($user){return trim($user);},
               explode(',', $arguments['grant'])
@@ -102,7 +161,7 @@ function execute( &$service, &$actionName, &$arguments ){
       break;
       //
     default:
-      return response404NotFound( sprintf("The command '%s' was not found", $actionName) );
+      return response404NotFound(sprintf("The command '%s' was not found", $actionName));
       break;
   }
 }//execute

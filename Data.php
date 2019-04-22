@@ -100,11 +100,6 @@ class Data{
   }//exists
 
   public static function list($database_name){
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return $res;
-    }
-    // ---
     $db = new Database(self::$package_id, $database_name);
     $lst = array_values(array_diff($db->list_keys(), [self::$metadata_key]));
     return ['success' => true, 'data' => $lst];
@@ -139,11 +134,6 @@ class Data{
     if (self::_is_key_reserved($key)) {
       return false;
     }
-    // make sure the user has access to this db
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return false;
-    }
     // ---
     $db = new Database(self::$package_id, $database_name);
     return $db->key_exists($key);
@@ -154,11 +144,6 @@ class Data{
     if (self::_is_key_reserved($key)) {
       return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
     }
-    // make sure the user has access to this db
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return $res;
-    }
     // ---
     $db = new Database(self::$package_id, $database_name);
     return $db->read($key);
@@ -168,11 +153,6 @@ class Data{
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
       return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
-    }
-    // make sure the user has access to this db
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return $res;
     }
     // ---
     if (!self::exists($database_name)){
@@ -195,21 +175,22 @@ class Data{
     return $db->write($key, $data);
   }//set
 
-  public static function set_public_access($database_name){
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return $res;
+  public static function del($database_name, $key){
+    // make sure the key is not reserved
+    if (self::_is_key_reserved($key)) {
+      return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
     }
     // ---
+    // delete key from DB
+    $db = new Database(self::$package_id, $database_name);
+    return $db->delete($key);
+  }//del
+
+  public static function set_public_access($database_name){
     return self::_update_metadata($database_name, 'type', 'public');
   }//set_public_access
 
   public static function set_private_access($database_name, $grant_list){
-    $res = self::_authenticate($database_name, true);
-    if (!$res['success']){
-      return $res;
-    }
-    // ---
     $res = self::_update_metadata($database_name, 'grant', $grant_list);
     if (!$res['success']){
       return $res;
@@ -218,11 +199,6 @@ class Data{
   }//set_public_access
 
   public static function set_ownership($database_name, $user_id){
-    $res = self::_authenticate($database_name);
-    if (!$res['success']){
-      return $res;
-    }
-    // ---
     if (!Core::userExists($user_id)) {
       return ['success' => false, 'data' => sprintf('The user "%s" does not exist.', $user_id)];
     }
