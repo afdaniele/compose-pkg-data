@@ -207,7 +207,7 @@ $dbs = $tmp;
 if( $features['keywords']['value'] != null ){
   $tmp = array();
   foreach($dbs as &$db){
-    if (strpos(strtolower($db['name']), strtolower($features['keywords']['value'])) !== false ||
+    if (strpos(strtolower($db['database']), strtolower($features['keywords']['value'])) !== false ||
         strpos(strtolower($db['owner_name']), strtolower($features['keywords']['value'])) !== false) {
       array_push($tmp, $db);
     }
