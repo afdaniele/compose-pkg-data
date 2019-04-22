@@ -92,6 +92,11 @@ class Data{
   }//listDBs
 
   public static function getDB($database_name){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
+    // ---
     return new Database(self::$package_id, $database_name);
   }//getDB
 
@@ -100,12 +105,48 @@ class Data{
   }//exists
 
   public static function list($database_name){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
+    // ---
     $db = new Database(self::$package_id, $database_name);
     $lst = array_values(array_diff($db->list_keys(), [self::$metadata_key]));
     return ['success' => true, 'data' => $lst];
   }//list
 
+  public static function new($database_name){
+    // make sure the database does not exist
+    if (self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" already exists.', $database_name)];
+    }
+    // write metadata
+    $user_id = Core::getUserLogged('username');
+    $mdata = ['type' => 'private', 'owner' => $user_id];
+    foreach ($mdata as $k => $value) {
+      $res = self::_update_metadata($database_name, $k, $value);
+      if (!$res['success']){
+        return $res;
+      }
+    }
+    return ['success' => true, 'data' => null];
+  }//new
+
+  public static function drop($database_name){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
+    // ---
+    return Database::delete_db(self::$package_id, $database_name);
+  }//drop
+
   public static function info($database_name){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
+    // ---
     $res = self::_get_metadata($database_name);
     if (!$res['success']){
       return $res;
@@ -130,6 +171,10 @@ class Data{
   }//info
 
   public static function has($database_name, $key){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
       return false;
@@ -140,6 +185,10 @@ class Data{
   }//has
 
   public static function get($database_name, $key){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
       return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
@@ -150,22 +199,15 @@ class Data{
   }//get
 
   public static function set($database_name, $key, $data){
+    // make sure the database exists
+    if (!self::exists($database_name)){
+      return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
+    }
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
       return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
     }
     // ---
-    if (!self::exists($database_name)){
-      // write metadata
-      $user_id = Core::getUserLogged('username');
-      $mdata = ['type' => 'private', 'owner' => $user_id];
-      foreach ($mdata as $k => $value) {
-        $res = self::_update_metadata($database_name, $k, $value);
-        if (!$res['success']){
-          return $res;
-        }
-      }
-    }
     // parse data if it is JSON
     if (is_string($data) && is_JSON($data)) {
       $data = json_decode($data, true);
