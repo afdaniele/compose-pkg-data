@@ -13,6 +13,33 @@ function execute( &$service, &$actionName, &$arguments ){
   Core::startSession();
   //
   switch( $actionName ){
+    case 'new':
+      // get arguments
+      $database_name = $arguments['database'];
+      // ---
+      $res = Data::new($database_name);
+      if (!$res['success'])
+        return response400BadRequest($res['data']);
+      // success
+      return response200OK();
+      break;
+      //
+    case 'drop':
+      // get arguments
+      $database_name = $arguments['database'];
+      // make sure the user has access to the DB
+      $res = Data::canAccess($database_name, true);
+      if (!$res['success']){
+        return response401UnauthorizedMsg($res['data']);
+      }
+      // ---
+      $res = Data::drop($database_name);
+      if (!$res['success'])
+        return response400BadRequest($res['data']);
+      // success
+      return response200OK();
+      break;
+      //
     case 'list':
       // get arguments
       $database_name = $arguments['database'];
