@@ -40,6 +40,23 @@ $db = Data::getDB($db_name);
 }
 </style>
 
+<p style="margin-top:-30px; margin-bottom:30px">
+  <?php
+  $lst_args = isset($_GET['lst'])? base64_decode($_GET['lst']) : '';
+  ?>
+  <a href="<?php
+    echo sprintf(
+      '%s%s%s%s',
+      Configuration::$BASE_URL,
+      Configuration::$PAGE,
+      strlen($lst_args)>0? '?':'',
+      $lst_args
+    )
+    ?>">
+    &larr; Back to the list
+  </a>
+</p>
+
 
 <?php
 
