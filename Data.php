@@ -87,6 +87,14 @@ class Data{
   // =======================================================================================================
   // Public functions
 
+  public static function listDBs(){
+    return Database::list_dbs(self::$package_id);
+  }//listDBs
+
+  public static function getDB($database_name){
+    return new Database(self::$package_id, $database_name);
+  }//getDB
+
   public static function exists($database_name){
     return Database::database_exists(self::$package_id, $database_name);
   }//exists
