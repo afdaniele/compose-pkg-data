@@ -25,9 +25,9 @@ use \system\classes\Database;
 *      {
 *         "auth" : {
 *            "type" : one-of{ "public", "private" },
-*            "owner" : "user_id",
+*            "owner" : "<user_id>",
 *            "grant" : [
-*               "user_id",
+*               "<user_id>",
 *               ...
 *            ]
 *         }
