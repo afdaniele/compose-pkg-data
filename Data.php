@@ -102,6 +102,30 @@ class Data{
     return ['success' => true, 'data' => $lst];
   }//list
 
+  public static function info($database_name){
+    $res = self::_get_metadata($database_name);
+    if (!$res['success']){
+      return $res;
+    }
+    $metadata = $res['data'];
+    // get list of keys
+    $res = self::list($database_name);
+    if (!$res['success']){
+      return $res;
+    }
+    $keys = $res['data'];
+    $count_keys = count($res['data']);
+    // compile output
+    $info = [
+      'name' => $database_name,
+      'keys' => $keys,
+      'size' => $count_keys,
+      'metadata' => $metadata
+    ];
+    // ---
+    return ['success' => true, 'data' => $info];
+  }//info
+
   public static function has($database_name, $key){
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
