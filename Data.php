@@ -194,6 +194,10 @@ class Data{
     return self::_update_metadata($database_name, 'owner', $user_id);
   }//set_ownership
 
+  public static function canAccess($database_name, $force_ownership=false) {
+    return self::_authenticate($database_name, $force_ownership);
+  }//canAccess
+
 
 
   // =======================================================================================================
