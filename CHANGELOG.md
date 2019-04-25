@@ -1,3 +1,7 @@
+## 0.3.1 (April 24, 2019)
+  - minor
+  - added _is_database_name_valid() to all public functions in Data
+
 ## 0.3 (April 21, 2019)
   - added "go back to list" in DB page
   - fixed bug
