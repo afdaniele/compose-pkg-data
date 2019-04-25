@@ -92,6 +92,10 @@ class Data{
   }//listDBs
 
   public static function getDB($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -101,10 +105,19 @@ class Data{
   }//getDB
 
   public static function exists($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    //---
     return Database::database_exists(self::$package_id, $database_name);
   }//exists
 
   public static function list($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -116,6 +129,10 @@ class Data{
   }//list
 
   public static function new($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database does not exist
     if (self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" already exists.', $database_name)];
@@ -133,6 +150,10 @@ class Data{
   }//new
 
   public static function drop($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -142,6 +163,10 @@ class Data{
   }//drop
 
   public static function info($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -171,6 +196,10 @@ class Data{
   }//info
 
   public static function has($database_name, $key){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -185,6 +214,10 @@ class Data{
   }//has
 
   public static function get($database_name, $key){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -199,6 +232,10 @@ class Data{
   }//get
 
   public static function set($database_name, $key, $data){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the database exists
     if (!self::exists($database_name)){
       return ['success' => false, 'data' => sprintf('The database "%s" does not exist.', $database_name)];
@@ -218,6 +255,10 @@ class Data{
   }//set
 
   public static function del($database_name, $key){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
     // make sure the key is not reserved
     if (self::_is_key_reserved($key)) {
       return ['success' => false, 'data' => sprintf('The key "%s" is reserved and cannot be used.', $key)];
@@ -229,10 +270,20 @@ class Data{
   }//del
 
   public static function set_public_access($database_name){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    //---
     return self::_update_metadata($database_name, 'type', 'public');
   }//set_public_access
 
   public static function set_private_access($database_name, $grant_list){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    //---
     $res = self::_update_metadata($database_name, 'grant', $grant_list);
     if (!$res['success']){
       return $res;
@@ -241,6 +292,11 @@ class Data{
   }//set_public_access
 
   public static function set_ownership($database_name, $user_id){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    //---
     if (!Core::userExists($user_id)) {
       return ['success' => false, 'data' => sprintf('The user "%s" does not exist.', $user_id)];
     }
@@ -249,6 +305,11 @@ class Data{
   }//set_ownership
 
   public static function canAccess($database_name, $force_ownership=false) {
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    //---
     return self::_authenticate($database_name, $force_ownership);
   }//canAccess
 
@@ -340,6 +401,10 @@ class Data{
     $metadata['auth'][$key] = $value;
     return $db->write(self::$metadata_key, $metadata);
   }//_update_metadata
+
+  private static function _is_database_name_valid($database_name){
+    return (!is_null($database_name) && strlen(trim($database_name)) > 0);
+  }//_is_database_name_valid
 
 }//Data
 
