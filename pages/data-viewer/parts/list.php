@@ -171,6 +171,9 @@ for( $i = 0; $i < sizeof($dbs); $i++ ){
   if (array_key_exists($owner_id, $users_cache)) {
     $owner = $users_cache[$owner_id];
     $owner_name = $users_name_cache[$owner_id];
+  } elseif (is_null($owner_id)){
+    $owner = '(nobody)';
+    $owner_name = '(nobody)';
   } else {
     $res = Core::getUserInfo($owner_id);
     if(!$res['success']){
