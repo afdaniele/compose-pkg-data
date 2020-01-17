@@ -1,6 +1,9 @@
 <?php
 
-require_once $GLOBALS['__PACKAGES__DIR__'].'/core/modules/modals/record_editor_modal.php';
+use \system\classes\Core;
+
+// load libraries
+require_once join_path(Core::getPackageDetails('core', 'root'), 'modules', 'modals', 'record_editor_modal.php');
 
 // create modal
 $db_create_form = [

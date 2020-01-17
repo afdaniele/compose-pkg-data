@@ -4,9 +4,10 @@ use \system\classes\Core;
 use \system\classes\Configuration;
 use \system\packages\data\Data;
 
-require_once $GLOBALS['__PACKAGES__DIR__'].'/core/modules/modals/record_editor_modal.php';
+require_once join_path(Core::getPackageDetails('core', 'root'), 'modules', 'modals', 'record_editor_modal.php');
 
 require_once $GLOBALS['__SYSTEM__DIR__'].'templates/tableviewers/TableViewer.php';
+
 use \system\templates\tableviewers\TableViewer;
 
 
@@ -259,7 +260,7 @@ generateRecordEditorModal(
   $method='GET',
   $action=null,
   $values=array(),
-  $size='sm'
+  $size='md'
 );
 
 
@@ -297,7 +298,7 @@ generateRecordEditorModal(
   $method='GET',
   $action=null,
   $values=array(),
-  $size='sm'
+  $size='md'
 );
 ?>
 

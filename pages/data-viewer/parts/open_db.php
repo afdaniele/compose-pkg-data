@@ -47,7 +47,7 @@ $db = Data::getDB($db_name);
   <a href="<?php
     echo sprintf(
       '%s%s%s%s',
-      Configuration::$BASE_URL,
+      Configuration::$BASE,
       Configuration::$PAGE,
       strlen($lst_args)>0? '?':'',
       $lst_args
