@@ -1,3 +1,3 @@
-# compose-pkg-data
+# compose-pkg-demo-mode
 
-Data package for the \compose\ platform. It provides a simple interface to a key-based database.
+Module that provides tools for using *\compose\* on TVs in demo mode.
