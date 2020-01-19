@@ -1,0 +1,305 @@
+{
+  "details" : "Provides a simple interface to a key-based database.",
+  "actions" : {
+    "new" : {
+      "details" : "Creates new database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database to create"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
+    "drop" : {
+      "details" : "Deletes a database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database to delete"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
+    "list" : {
+      "details" : "Lists the keys contained in a given database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database of which we want to list the keys"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {
+          "keys" : {
+            "type" : "array",
+            "details" : "List of keys",
+            "_data" : [
+              {
+                "type" : "text",
+                "details" : "Entry key"
+              },
+              "..."
+            ]
+          },
+          "total" : {
+            "type" : "numeric",
+            "details" : "Number of keys returned"
+          }
+        }
+      }
+    },
+    "exists" : {
+      "details" : "Returns whether a key is present in the given database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database the given key belongs to"
+          },
+          "key" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Key of the entry to retrieve"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {
+          "exists" : {
+            "type" : "boolean",
+            "details" : "Whether the given key was found in the given database"
+          }
+        }
+      }
+    },
+    "get" : {
+      "details" : "Returns the value corresponding to a given key and database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database the given key belongs to"
+          },
+          "key" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Key of the entry to retrieve"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {
+          "value" : {
+            "type" : "text",
+            "details" : "Data of the entry retrieved"
+          }
+        }
+      }
+    },
+    "set" : {
+      "details" : "Creates or updates a key-value pair in the given database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database the given key belongs to"
+          },
+          "key" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Key of the entry to retrieve"
+          },
+          "value" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Value to associate with the given key"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
+    "delete" : {
+      "details" : "Deletes the entry corresponding to a given key and database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database the given key belongs to"
+          },
+          "key" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Key of the entry to delete"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
+    "chown" : {
+      "details" : "Updates the owner of the given database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database to update"
+          },
+          "owner" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "User ID of the new owner"
+          }
+        },
+        "optional" : {}
+      },
+      "return" : {
+        "values" : {}
+      }
+    },
+    "chmod" : {
+      "details" : "Updates the access type of the given database",
+      "access_level" : [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+      ],
+      "authentication" : [
+        "web",
+        "app"
+      ],
+      "parameters" : {
+        "mandatory" : {
+          "database" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Name of the database to update"
+          },
+          "access" : {
+            "type" : "enum",
+            "values" : ["public", "private"],
+            "length" : null,
+            "details" : "New access mode for the database"
+          }
+        },
+        "optional" : {
+          "grant" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Comma-separated list of users to grant access (considered only if access='private')."
+          }
+        }
+      },
+      "return" : {
+        "values" : {}
+      }
+    }
+  }
+}

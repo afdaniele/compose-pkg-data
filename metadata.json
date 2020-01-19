@@ -1,6 +1,6 @@
 {
-  "name" : "Demo Mode",
-  "description" : "Provides tools for using \\compose\\ in demo mode on TVs.",
+  "name" : "Data",
+  "description" : "Provides a simple interface to a key-based database.",
   "dependencies" : {
     "system-packages" : [],
     "packages" : []
