@@ -154,7 +154,13 @@
             "details" : "Key of the entry to retrieve"
           }
         },
-        "optional" : {}
+        "optional" : {
+          "seek" : {
+            "type" : "text",
+            "length" : null,
+            "details" : "Path to the region of the record to fetch (requires a JSON record). Ex. /objects/cars/tesla/model_s"
+          }
+        }
       },
       "return" : {
         "values" : {

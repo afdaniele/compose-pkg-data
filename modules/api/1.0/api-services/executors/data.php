@@ -85,8 +85,22 @@ function execute( &$service, &$actionName, &$arguments ){
       $res = Data::get($database_name, $key);
       if (!$res['success'])
         return response400BadRequest($res['data']);
+      // data is here, apply seek if present
+      $data = $res['data'];
+      if (array_key_exists('seek', $arguments)) {
+        $path = explode('/', trim($arguments['seek'], '/'));
+        foreach ($path as $p){
+          if (array_key_exists($p, $data)) {
+            $data = &$data[$p];
+          }else{
+            return response404NotFound(
+                sprintf('Path %s not found in given record', $arguments['seek'])
+            );
+          }
+        }
+      }
       // success
-      return response200OK(['value' => $res['data']]);
+      return response200OK(['value' => $data]);
       break;
       //
     case 'set':
