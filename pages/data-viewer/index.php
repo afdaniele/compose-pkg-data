@@ -34,18 +34,17 @@ if (!is_null(Configuration::$ACTION)) {
             $url = Core::getAPIurl('data', 'new');
             ?>
             <button
-            class="btn btn-warning"
-            type="button"
-            data-toggle="tooltip dialog"
-            data-placement="bottom"
-            data-original-title="Create new database"
-            data-modal-mode="insert"
-            data-target="#record-editor-modal-db-create-form"
-            data-url="<?php echo $url ?>"
-            style="float: right">
+                class="btn btn-warning"
+                type="button"
+                data-toggle="tooltip dialog"
+                data-placement="bottom"
+                data-original-title="Create new database"
+                data-modal-mode="insert"
+                data-target="#record-editor-modal-db-create-form"
+                data-url="<?php echo $url ?>"
+                style="float: right">
               &nbsp;
               <i class="fa fa-asterisk" aria-hidden="true"></i>
-              &nbsp;
               New Database
             </button>
             <?php

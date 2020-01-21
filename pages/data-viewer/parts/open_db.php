@@ -2,7 +2,6 @@
 
 use \system\classes\Core;
 use \system\classes\Configuration;
-use \system\classes\Database;
 use \system\packages\data\Data;
 
 require_once $GLOBALS['__SYSTEM__DIR__'].'templates/tableviewers/TableViewer.php';
@@ -19,26 +18,6 @@ if (!is_null(Configuration::$ACTION)) {
 }
 $db = Data::getDB($db_name);
 ?>
-
-<style>
-.entry_data_viewer {
-  text-align: justify;
-  min-width: 530px;
-  max-width: 530px;
-  width: 530px;
-  min-height: 40px;
-  overflow-x: auto;
-  overflow-y: auto;
-  margin: -8px;
-  border-top: 0;
-  border-bottom: 0;
-}
-
-.entry_data_viewer_closed {
-  height: 40px;
-  max-height: 40px;
-}
-</style>
 
 <p style="margin-top:-30px; margin-bottom:30px">
   <?php
@@ -94,7 +73,7 @@ $table = array(
     'key' => array(
       'type' => 'text',
       'show' => true,
-      'width' => 'md-2',
+      'width' => 'md-7',
       'align' => 'left',
       'translation' => 'Key',
       'editable' => false
@@ -102,22 +81,28 @@ $table = array(
     'size' => array(
       'type' => 'text',
       'show' => true,
-      'width' => 'md-1',
+      'width' => 'md-2',
       'align' => 'center',
       'translation' => 'Size',
-      'editable' => false
-    ),
-    'value' => array(
-      'type' => 'text',
-      'show' => true,
-      'width' => 'md-7',
-      'align' => 'center',
-      'translation' => 'Value',
       'editable' => false
     )
   ),
   'actions' => array(
-    '_width' => 'md-1',
+    '_width' => 'md-3',
+    'open' => array(
+      'type' => 'default',
+      'glyphicon' => 'folder-open',
+      'tooltip' => 'Open entry',
+      'text' => null,
+      'function' => array(
+        'type' => '_toggle_modal',
+        'class' => 'open-entry-modal',
+        'arguments' => [
+          'database',
+          'key'
+        ]
+      )
+    ),
     'delete' => array(
       'type' => 'danger',
       'glyphicon' => 'trash',
@@ -179,21 +164,11 @@ $keys = array_slice(
 $entries = [];
 foreach($keys as &$key){
   $key_size = $db->key_size($key);
-  // read value
-  $res = $db->read($key);
-  if (!$res['success']) {
-    Core::throwError($res['data']);
-  }
-  $value = $res['data'];
   // build record for the table
   $key_record = [
     'database' => $db_name,
     'key' => $key,
-    'size' => human_filesize($key_size, $decimals=1),
-    'value' => sprintf(
-      '<pre class="entry_data_viewer entry_data_viewer_closed">%s</pre>',
-      print_r($value, true)
-    )
+    'size' => human_filesize($key_size, $decimals=1)
   ];
   array_push($entries, $key_record);
 }
@@ -207,24 +182,6 @@ $res = array(
 
 $baseuri = sprintf("%s/%s", Configuration::$PAGE, $db_name);
 TableViewer::generateTableViewer($baseuri, $res, $features, $table);
+
+include_once __DIR__.'/components/open_entry_modal.php';
 ?>
-
-<script type="text/javascript">
-
-  $('.entry_data_viewer').on('click', function(){
-    _enlarge_key(this);
-  });
-
-	function _enlarge_key(target){
-		var record = $(target).data('record');
-    // close all first
-    $('.entry_data_viewer').each(function(e){
-      if (this == target){
-        return;
-      }
-      $(this).addClass('entry_data_viewer_closed');
-    });
-    $(target).toggleClass('entry_data_viewer_closed');
-	}
-
-</script>
