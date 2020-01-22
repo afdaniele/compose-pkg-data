@@ -90,7 +90,19 @@ function execute( &$service, &$actionName, &$arguments ){
       if (array_key_exists('seek', $arguments)) {
         $path = explode('/', trim($arguments['seek'], '/'));
         foreach ($path as $p){
-          if (array_key_exists($p, $data)) {
+          if (!is_assoc($data) && startsWith($p, '[') && endsWith($p, ']')) {
+            // this is a selector of type: /[a,b,c]/
+            $ks = explode(',', trim($p, "[]"));
+            $data = array_values(array_map(
+                function ($e) use ($ks){
+                  return array_filter($e, function ($k) use ($ks) {
+                    return in_array($k, $ks);
+                  }, ARRAY_FILTER_USE_KEY);
+                },
+                $data
+            ));
+          } else if (array_key_exists($p, $data)) {
+            // this is a selector of the type /a/b
             $data = &$data[$p];
           }else{
             return response404NotFound(
