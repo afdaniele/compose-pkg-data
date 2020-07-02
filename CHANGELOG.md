@@ -1,3 +1,12 @@
+## 1.0.0-rc (July 02, 2020)
+  - minor
+  - API endpoint data/get now supports selector inside path. e.g., /a/[b,c,d]
+  - entries in data-viewer are now opened on a separate modal
+  - API endpoint /data/get now supports the optional arg 'seek'
+  - Revert "first commit"
+  - first commit
+  - added support for user-data
+
 ## 0.3.1 (April 24, 2019)
   - minor
   - added _is_database_name_valid() to all public functions in Data
