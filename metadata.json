@@ -1,8 +1,8 @@
 {
-  "name" : "Data",
-  "description" : "Provides a simple interface to a key-based database.",
-  "dependencies" : {
-    "system-packages" : [],
-    "packages" : []
-  }
+    "name": "Data",
+    "description": "Provides a simple interface to a key-based database.",
+    "dependencies": {
+        "system-packages": [],
+        "packages": []
+    }
 }
