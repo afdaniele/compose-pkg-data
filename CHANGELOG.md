@@ -1,3 +1,8 @@
+## 1.0.0-rc2 (July 21, 2020)
+  - added compatibility data to metadata.json as per compose v1.0+ requirement
+  - reformatted metadata.json
+  - preparing transition to compose v1.0
+
 ## 1.0.0-rc (July 02, 2020)
   - minor
   - API endpoint data/get now supports selector inside path. e.g., /a/[b,c,d]
