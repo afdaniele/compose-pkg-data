@@ -9,32 +9,35 @@ use \system\classes\Configuration;
 use \system\packages\data\Data;
 
 
-$subtitle = 'Databases';
+$subtitle = '';
 $part = 'list';
 
 if (!is_null(Configuration::$ACTION)) {
-  $db_name = Configuration::$ACTION;
-  if (!Data::exists($db_name)) {
-    Core::throwError(sprintf('The database "%s" does not exist', $db_name));
-  }
-  $part = 'open_db';
-  $subtitle = sprintf('Database <span class="mono">"%s"</span>', $db_name);
+    $db_name = Configuration::$ACTION;
+    if (!Data::exists($db_name)) {
+        Core::throwError(sprintf('The database "%s" does not exist', $db_name));
+    }
+    $part = 'open_db';
+    $subtitle = sprintf('Database <span class="mono">"%s"</span>', $db_name);
 }
 ?>
 
-<div style="width:100%; margin:auto">
+<style type="text/css">
+    .page-title {
+        margin-bottom: 0;
+    }
+</style>
 
-  <table style="width:100%; border-bottom:1px solid #ddd; margin-bottom:32px">
-    <tr>
-      <td style="width:100%">
-        <h2>
-          Data Viewer - <?php echo $subtitle ?>
-          <?php
-          if ($part == 'list') {
-            $url = Core::getAPIurl('data', 'new');
-            ?>
-            <button
-                class="btn btn-warning"
+
+<h2 class="page-title"></h2>
+<h4 style="margin-bottom: 30px">
+    <?php
+    echo $subtitle;
+    if ($part == 'list') {
+        $url = Core::getAPIurl('data', 'new');
+        ?>
+        <button
+                class="btn btn-warning btn-sm"
                 type="button"
                 data-toggle="tooltip dialog"
                 data-placement="bottom"
@@ -43,24 +46,20 @@ if (!is_null(Configuration::$ACTION)) {
                 data-target="#record-editor-modal-db-create-form"
                 data-url="<?php echo $url ?>"
                 style="float: right">
-              &nbsp;
-              <i class="fa fa-asterisk" aria-hidden="true"></i>
-              New Database
-            </button>
-            <?php
-          }
-          ?>
-        </h2>
-      </td>
-    </tr>
-  </table>
+            &nbsp;
+            <i class="fa fa-asterisk" aria-hidden="true"></i>
+            New Database
+        </button>
+        <br/>
+        <?php
+    }
+    ?>
+</h4>
 
-  <?php
-  include_once __DIR__.sprintf('/parts/%s.php', $part);
+<?php
+include_once __DIR__ . sprintf('/parts/%s.php', $part);
 
-  if ($part == 'list') {
-    include_once __DIR__.'/parts/create_db.php';
-  }
-  ?>
-
-</div>
+if ($part == 'list') {
+    include_once __DIR__ . '/parts/create_db.php';
+}
+?>
