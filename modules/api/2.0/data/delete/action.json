@@ -1,0 +1,13 @@
+{
+    "description": "Deletes the entry corresponding to a given key and database",
+    "access_level": [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+    ],
+    "authentication": [
+        "web",
+        "app"
+    ]
+}

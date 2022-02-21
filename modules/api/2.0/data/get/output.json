@@ -1,0 +1,21 @@
+{
+    "type": "object",
+    "description": "output",
+    "properties": {
+        "value": {
+            "type": [
+                "array",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+            ],
+            "description": "Data of the entry retrieved"
+        }
+    },
+    "required": [
+        "value"
+    ]
+}

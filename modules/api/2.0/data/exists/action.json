@@ -1,0 +1,13 @@
+{
+    "description": "Check whether a key is present in the given database",
+    "access_level": [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+    ],
+    "authentication": [
+        "web",
+        "app"
+    ]
+}

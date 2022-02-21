@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "description": "input",
+    "properties": {
+        "database": {
+            "type": "string",
+            "description": "Name of the database the given key belongs to"
+        },
+        "key": {
+            "type": "string",
+            "description": "Key of the entry to update"
+        }
+    },
+    "required": [
+        "database",
+        "key"
+    ]
+}

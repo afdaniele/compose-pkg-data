@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "description": "output",
+    "properties": {
+        "exists": {
+            "type": "boolean",
+            "description": "Whether the given key was found in the given database"
+        }
+    },
+    "required": [
+        "exists"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "description": "Updates the access type of the given database",
+    "access_level": [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+    ],
+    "authentication": [
+        "web",
+        "app"
+    ]
+}

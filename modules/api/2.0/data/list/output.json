@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "description": "output",
+    "properties": {
+        "keys": {
+            "type": "array",
+            "description": "List of keys",
+            "items": {
+                "type": "string",
+                "description": "Database record key"
+            }
+        }
+    },
+    "required": [
+        "keys"
+    ]
+}

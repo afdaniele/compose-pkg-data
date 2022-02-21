@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "description": "input",
+    "properties": {
+        "database": {
+            "type": "string",
+            "description": "Name of the database to delete"
+        }
+    },
+    "required": [
+        "database"
+    ]
+}

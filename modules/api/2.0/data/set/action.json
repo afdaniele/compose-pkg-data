@@ -1,0 +1,13 @@
+{
+    "description": "Creates or updates a key-value pair in the given database",
+    "access_level": [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+    ],
+    "authentication": [
+        "web",
+        "app"
+    ]
+}

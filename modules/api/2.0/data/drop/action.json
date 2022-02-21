@@ -1,0 +1,12 @@
+{
+    "description": "Deletes a database",
+    "access_level": [
+        "guest",
+        "user",
+        "supervisor",
+        "administrator"
+    ],
+    "authentication": [
+        "web"
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "description": "input",
+    "properties": {
+        "database": {
+            "type": "string",
+            "description": "Name of the database to update"
+        },
+        "access": {
+            "type": "string",
+            "enum": [
+                "public",
+                "private"
+            ],
+            "description": "New access mode for the database"
+        },
+        "grant": {
+            "type": "string",
+            "description": "Comma-separated list of users to grant access (considered only if access='private')"
+        }
+    },
+    "required": [
+        "database",
+        "access"
+    ]
+}
