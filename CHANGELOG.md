@@ -1,3 +1,6 @@
+## 1.0.1 (June 19, 2023)
+  - added guest access modes
+
 ## 1.0.0 (July 23, 2020)
   - minor
 
