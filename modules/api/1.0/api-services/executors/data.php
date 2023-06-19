@@ -76,7 +76,7 @@ function execute( &$service, &$actionName, &$arguments ){
       $database_name = $arguments['database'];
       $key = $arguments['key'];
       // make sure the user has access to the DB
-      $res = Data::canAccess($database_name);
+      $res = Data::canAccess($database_name, false, "r");
       if (!$res['success']){
         return response401UnauthorizedMsg($res['data']);
       }
@@ -121,7 +121,7 @@ function execute( &$service, &$actionName, &$arguments ){
       $key = $arguments['key'];
       $value = $arguments['value'];
       // make sure the user has access to the DB
-      $res = Data::canAccess($database_name);
+      $res = Data::canAccess($database_name, false, "w");
       if (!$res['success']){
         return response401UnauthorizedMsg($res['data']);
       }

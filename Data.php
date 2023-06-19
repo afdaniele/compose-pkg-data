@@ -138,7 +138,7 @@ class Data{
     }
     // write metadata
     $user_id = Core::getUserLogged('username');
-    $mdata = ['type' => 'private', 'owner' => $user_id];
+    $mdata = ['type' => 'private', 'owner' => $user_id, 'guest' => []];
     foreach ($mdata as $k => $value) {
       $res = self::_update_metadata($database_name, $k, $value);
       if (!$res['success']){
@@ -303,13 +303,30 @@ class Data{
     return self::_update_metadata($database_name, 'owner', $user_id);
   }//set_ownership
 
-  public static function canAccess($database_name, $force_ownership=false) {
+  public static function set_guest_access($database_name, $can_read, $can_write){
+    // make sure that the given arguments are valid
+    if (!self::_is_database_name_valid($database_name)) {
+      return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
+    }
+    // define access
+    $guest = [];
+    if ($can_read){
+      array_push($guest, "r");
+    }
+    if ($can_write){
+      array_push($guest, "w");
+    }
+    //---
+    return self::_update_metadata($database_name, 'guest', $guest);
+  }//set_guest_access
+
+  public static function canAccess($database_name, $force_ownership=false, $mode="rw") {
     // make sure that the given arguments are valid
     if (!self::_is_database_name_valid($database_name)) {
       return ['success' => false, 'data' => sprintf('The database name "%s" is not valid.', $database_name)];
     }
     //---
-    return self::_authenticate($database_name, $force_ownership);
+    return self::_authenticate($database_name, $force_ownership, $mode);
   }//canAccess
 
 
@@ -325,11 +342,7 @@ class Data{
     return false;
   }//_is_key_reserved
 
-  private static function _authenticate($database_name, $force_ownership=false){
-    // guests do not have access to DBs
-    if (!Core::isUserLoggedIn()) {
-      return ['success' => false, 'data' => 'You need to login to access the databases.'];
-    }
+  private static function _authenticate($database_name, $force_ownership=false, $mode="rw"){
     // a database that does not exist is always accessible
     if (!self::exists($database_name)) {
       return ['success' => true, 'data' => null];
@@ -338,27 +351,48 @@ class Data{
     if (Core::getUserRole() == 'administrator') {
       return ['success' => true, 'data' => null];
     }
-    // get user id
-    $user_id = Core::getUserLogged('username');
-    // get metadata
+    // we know the database exists, and we are not an admin, we might be a user or a guest
     $res = self::_get_metadata($database_name);
     if (!$res['success']){
       return $res;
     }
+    // get metadata
     $metadata = $res['data'];
     if (is_null($metadata) || !array_key_exists('auth', $metadata)) {
-      return ['success' => false, 'data' => sprintf('No authentication data available for the database "%s"', $database_name)];
+      return [
+        'success' => false,
+        'data' => sprintf('No authentication data available for the database "%s"', $database_name)
+      ];
     }
-    $no_access_msg = sprintf('You don\'t have access to the database "%s".', $database_name);
     $auth_data = $metadata['auth'];
     if (is_null($auth_data)) {
-      return ['success' => false, 'data' => $no_access_msg];
-    }
-    // get auth type
-    if (!array_key_exists('type', $auth_data) || !in_array($auth_data['type'], ['public', 'private'])) {
-      return ['success' => false, 'data' => $no_access_msg];
+      return ['success' => false, 'data' => "Internal error. Invalid database metadata."];
     }
     $auth_type = $auth_data['type'];
+    // check for guest access
+    if (!Core::isUserLoggedIn()) {
+      // we are a guest, can only access public databases with explicitly defined guest access control rules
+      if ($auth_type != "public") {
+        return ['success' => false, 'data' => sprintf("Guests can only access public databases [%s]", $auth_type)];
+      }
+      $guest_access = [];
+      if (array_key_exists("guest", $auth_data)) {
+        $guest_access = $auth_data["guest"];
+      }
+      // check rules
+      $ops = str_split($mode);
+      foreach($ops as $op){
+        if (!in_array($op, $guest_access)) {
+          return [
+              'success' => false,
+              'data' => sprintf('You don\'t have "%s" access to the database "%s".', $op, $database_name)
+          ];
+        }
+      }
+      return ['success' => true, 'data' => null];
+    }
+    // get user id
+    $user_id = Core::getUserLogged('username');
     if ($auth_type == 'public' && !$force_ownership) {
       return ['success' => true, 'data' => null];
     }
@@ -366,14 +400,20 @@ class Data{
     $auth_owner = array_key_exists('owner', $auth_data)? $auth_data['owner'] : null;
     $auth_grant = array_key_exists('grant', $auth_data)? $auth_data['grant'] : null;
     if (is_null($auth_owner) && (is_null($auth_grant) || !is_array($auth_grant))) {
-      return ['success' => false, 'data' => $no_access_msg];
+      return [
+          'success' => false,
+          'data' => sprintf('You don\'t have access to the database "%s".', $database_name)
+      ];
     }
     // check owner
     if ($auth_owner == $user_id || (is_array($auth_grant) && in_array($user_id, $auth_grant))){
       return ['success' => true, 'data' => null];
     }
     // by default, deny access
-    return ['success' => false, 'data' => $no_access_msg];
+    return [
+        'success' => false,
+        'data' => sprintf('You don\'t have access to the database "%s".', $database_name)
+    ];
   }//_authenticate
 
   private static function _get_metadata($database_name){
@@ -383,8 +423,8 @@ class Data{
   }//_get_metadata
 
   private static function _update_metadata($database_name, $key, $value){
-    if (!in_array($key, ['type', 'owner', 'grant'])) {
-      return ['success' => false, 'data' => "Key must be one of ['type', 'owner', 'grant']."];
+    if (!in_array($key, ['type', 'owner', 'guest', 'grant'])) {
+      return ['success' => false, 'data' => "Key must be one of ['type', 'owner', 'guest', 'grant']."];
     }
     $db = new Database(self::$package_id, $database_name);
     $metadata = [
